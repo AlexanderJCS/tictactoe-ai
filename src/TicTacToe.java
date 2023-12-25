@@ -26,8 +26,8 @@ public class TicTacToe {
     }
 
     public void update() {
-        if (this.turn == Turn.X) {
-            this.ai.makeMove(this.board);
+        if (this.turn == Turn.O) {
+            this.ai.makeMove(this.board, this.turn.toBoardState());
             this.turn = this.turn.switchTurn();
         }
 

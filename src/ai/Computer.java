@@ -5,7 +5,6 @@ import board.BoardSpace;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public abstract class Computer {
@@ -23,5 +22,5 @@ public abstract class Computer {
         return spaces;
     }
 
-    public abstract void makeMove(Board board);
+    public abstract void makeMove(Board board, BoardSpace.BoardState playingAs);
 }
