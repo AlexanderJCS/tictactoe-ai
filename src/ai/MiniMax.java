@@ -108,7 +108,7 @@ public class MiniMax extends Computer {
         BoardSpace bestSpace = emptySpaces.get(0);
 
         for (BoardSpace space : emptySpaces) {
-            space.setState(BoardSpace.BoardState.X);
+            space.setState(playingAs);
             int evaluation = this.minimax(board, 9, false, playingAs);
             space.setState(BoardSpace.BoardState.EMPTY);
 
