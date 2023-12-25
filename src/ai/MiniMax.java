@@ -16,12 +16,12 @@ public class MiniMax extends Computer {
         // https://john.cs.olemiss.edu/~dwilkins/CSCI531/fall12/slides/AI_09_games.pdf
 
         BoardSpace.BoardState winner = board.winner();
-        if (winner == BoardSpace.BoardState.X) {
+        if (winner == playingAs) {
             return Integer.MAX_VALUE;
-        } else if (winner == BoardSpace.BoardState.O) {
-            return Integer.MIN_VALUE;
         } else if (winner == null) {
             return 0;
+        } else if (winner != BoardSpace.BoardState.EMPTY) {  // if the opponent won
+            return Integer.MIN_VALUE;
         }
 
         // eval = 3 * x_2_in_row + x_1_in_row - (3 * o_2_in_row + o_1_in_row)
@@ -71,6 +71,12 @@ public class MiniMax extends Computer {
     private int minimax(Board board, int depth, boolean findMax, BoardSpace.BoardState playingAs) {
         // TODO: clean up spaghetti
 
+        if (board.winner() == playingAs) {
+            return Integer.MAX_VALUE - 10000 + depth;
+        } else if (board.winner() != BoardSpace.BoardState.EMPTY) {
+            return Integer.MIN_VALUE;
+        }
+
         if (depth == 0 || board.winner() != BoardSpace.BoardState.EMPTY) {
             return this.evaluate(board, playingAs);
         }
@@ -109,7 +115,7 @@ public class MiniMax extends Computer {
 
         for (BoardSpace space : emptySpaces) {
             space.setState(playingAs);
-            int evaluation = this.minimax(board, 9, false, playingAs);
+            int evaluation = this.minimax(board, 5, false, playingAs);
             space.setState(BoardSpace.BoardState.EMPTY);
 
             if (evaluation > bestEval) {

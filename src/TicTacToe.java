@@ -6,6 +6,7 @@ import jangl.Jangl;
 import jangl.io.Window;
 import jangl.io.mouse.Mouse;
 import jangl.io.mouse.MouseEvent;
+import jangl.time.Clock;
 import org.lwjgl.glfw.GLFW;
 
 public class TicTacToe {
@@ -13,6 +14,8 @@ public class TicTacToe {
 
     private final Board board;
     private final Computer ai;
+    private static final float WAIT_TIME = 0.5f;
+    private float timeToWait = Clock.getTimef() + WAIT_TIME;
     private Turn turn;
 
     public TicTacToe() {
@@ -26,24 +29,34 @@ public class TicTacToe {
     }
 
     public void update() {
+        if (Clock.getTimef() < this.timeToWait) {
+            return;
+        }
+
+        this.timeToWait = Clock.getTimef() + WAIT_TIME;
+
         if (this.turn == Turn.O) {
             this.ai.makeMove(this.board, this.turn.toBoardState());
             this.turn = this.turn.switchTurn();
+            return;
         }
 
-        for (MouseEvent event : Mouse.getEvents()) {
-            // The event was not a left click
-            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
-                continue;
-            }
+        this.ai.makeMove(this.board, this.turn.toBoardState());
+        this.turn = this.turn.switchTurn();
 
-            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
-                this.turn = this.turn.switchTurn();
-            }
-        }
+//        for (MouseEvent event : Mouse.getEvents()) {
+//            // The event was not a left click
+//            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
+//                continue;
+//            }
+//
+//            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
+//                this.turn = this.turn.switchTurn();
+//            }
+//        }
     }
 
-    public void run() {
+    public BoardSpace.BoardState run() {
         while (Window.shouldRun() && this.board.winner() == BoardSpace.BoardState.EMPTY) {
             Window.clear();
 
@@ -53,7 +66,7 @@ public class TicTacToe {
             Jangl.update();
         }
 
-        System.out.println("Winner: " + this.board.winner());
+        return this.board.winner();
     }
 
     public enum Turn {

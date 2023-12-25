@@ -10,7 +10,7 @@ public class Main {
         Window.setTitle("Tic Tac Toe");
 
         TicTacToe ttt = new TicTacToe();
-        ttt.run();
+        System.out.println("Winner: " + ttt.run());
 
         Window.close();
     }
