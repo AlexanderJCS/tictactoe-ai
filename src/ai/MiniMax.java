@@ -85,7 +85,7 @@ public class MiniMax extends Computer {
             int maxEval = Integer.MIN_VALUE;
 
             for (BoardSpace space : this.getEmptySpaces(board)) {
-                space.setState(BoardSpace.BoardState.X);
+                space.setState(playingAs);
                 int evaluation = this.minimax(board, depth - 1, false, playingAs);
                 maxEval = Math.max(maxEval, evaluation);
                 space.setState(BoardSpace.BoardState.EMPTY);
@@ -97,7 +97,8 @@ public class MiniMax extends Computer {
         int minEval = Integer.MAX_VALUE;
 
         for (BoardSpace space : this.getEmptySpaces(board)) {
-            space.setState(BoardSpace.BoardState.O);
+            // TODO: replace with a flippy floppy method
+            space.setState(playingAs == BoardSpace.BoardState.X ? BoardSpace.BoardState.O : BoardSpace.BoardState.X);
             int evaluation = this.minimax(board, depth - 1, true, playingAs);
             minEval = Math.min(minEval, evaluation);
             space.setState(BoardSpace.BoardState.EMPTY);
