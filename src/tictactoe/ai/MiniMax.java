@@ -8,16 +8,22 @@ import tictactoe.board.BoardState;
 import java.util.List;
 
 public class MiniMax extends Computer {
-    private int evaluate(Board board, Turn playingAs, int depth) {
-        // Currently only works on boards with size of 3. In the future I want to make this work with any size main.board.
-        // TODO: comment above, plus clean up spaghetti
-        // TODO: reward wins that happen closer in the future
+    public MiniMax() {
+        super();
+    }
+
+    public MiniMax(Board board, Turn playingAs) {
+        super(board, playingAs);
+    }
+
+    private int evaluate(int depth) {
+        // TODO: clean up spaghetti
 
         // Evaluation method based on this document
         // https://john.cs.olemiss.edu/~dwilkins/CSCI531/fall12/slides/AI_09_games.pdf
 
-        BoardState winner = board.winner();
-        if (winner == playingAs.toBoardState()) {
+        BoardState winner = this.board.winner();
+        if (winner == this.playingAs.toBoardState()) {
             // The addition is to make sure that the AI chooses the move that wins the fastest.
             // The -100000 is to ensure that the integer does not overflow
             // The Math.max() is to make sure that, if the integer does overflow (which is very unlikely), it will not
@@ -25,14 +31,14 @@ public class MiniMax extends Computer {
 
             return Math.max(Integer.MAX_VALUE - 100000 + depth, Integer.MAX_VALUE);
 
-        } else if (winner == playingAs.switchTurn().toBoardState()) {
+        } else if (winner == this.playingAs.switchTurn().toBoardState()) {
             return Integer.MIN_VALUE;
         } else if (winner == null) {
             return 0;
         }
 
         // eval = 3 * x_2_in_row + x_1_in_row - (3 * o_2_in_row + o_1_in_row)
-        BoardState[][] rowsColsDiags = board.getRowsColsDiags();
+        BoardState[][] rowsColsDiags = this.board.getRowsColsDiags();
 
         int x_2_in_row = 0;
         int x_1_in_row = 0;
@@ -51,18 +57,18 @@ public class MiniMax extends Computer {
                 }
             }
 
-            if (x == board.getSize() - 1 && o == 0) {
+            if (x == this.board.getSize() - 1 && o == 0) {
                 x_2_in_row++;
             } else if (x > 0 && o == 0) {
                 x_1_in_row++;
-            } else if (o == board.getSize() - 1 && x == 0) {
+            } else if (o == this.board.getSize() - 1 && x == 0) {
                 o_2_in_row++;
             } else if (o > 0 && x == 0) {
                 o_1_in_row++;
             }
         }
 
-        if (playingAs == Turn.X) {
+        if (this.playingAs == Turn.X) {
             return 3 * x_2_in_row + x_1_in_row - (3 * o_2_in_row + o_1_in_row);
         }
 
@@ -75,18 +81,18 @@ public class MiniMax extends Computer {
      * @param depth The depth of the search.
      * @param findMax Whether to find the maximum or minimum.
      */
-    private int minimax(Board board, int depth, boolean findMax, int alpha, int beta, Turn playingAs) {
-        if (depth == 0 || board.winner() != BoardState.EMPTY) {
-            return this.evaluate(board, playingAs, depth);
+    private int minimax(int depth, boolean findMax, int alpha, int beta) {
+        if (depth == 0 || this.board.winner() != BoardState.EMPTY) {
+            return this.evaluate(depth);
         }
 
         int maxOrMin = findMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        for (BoardSpace space : this.getEmptySpaces(board)) {
-            BoardState stateToSet = findMax ? playingAs.toBoardState() : playingAs.switchTurn().toBoardState();
+        for (BoardSpace space : this.getEmptySpaces()) {
+            BoardState stateToSet = findMax ? this.playingAs.toBoardState() : this.playingAs.switchTurn().toBoardState();
 
             space.setState(stateToSet);
-            int evaluation = this.minimax(board, depth - 1, !findMax, alpha, beta, playingAs);
+            int evaluation = this.minimax(depth - 1, !findMax, alpha, beta);
             maxOrMin = findMax ? Math.max(maxOrMin, evaluation) : Math.min(maxOrMin, evaluation);
 
             space.setState(BoardState.EMPTY);
@@ -107,8 +113,8 @@ public class MiniMax extends Computer {
     }
 
     @Override
-    public void makeMove(Board board, Turn playingAs) {
-        List<BoardSpace> emptySpaces = this.getEmptySpaces(board);
+    public void run() {
+        List<BoardSpace> emptySpaces = this.getEmptySpaces();
 
         if (emptySpaces.isEmpty()) {
             return;
@@ -118,8 +124,8 @@ public class MiniMax extends Computer {
         BoardSpace bestSpace = emptySpaces.get(0);
 
         for (BoardSpace space : emptySpaces) {
-            space.setState(playingAs.toBoardState());
-            int evaluation = this.minimax(board, 4, false, Integer.MIN_VALUE, Integer.MAX_VALUE, playingAs);
+            space.setState(this.playingAs.toBoardState());
+            int evaluation = this.minimax(4, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
             space.setState(BoardState.EMPTY);
 
             if (evaluation > bestEval) {
@@ -128,6 +134,6 @@ public class MiniMax extends Computer {
             }
         }
 
-        bestSpace.setState(playingAs.toBoardState());
+        bestSpace.setState(this.playingAs.toBoardState());
     }
 }

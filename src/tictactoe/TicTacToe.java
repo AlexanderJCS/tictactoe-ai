@@ -16,6 +16,7 @@ public class TicTacToe {
     private final Computer xPlayer;
     private final Computer oPlayer;
     private Turn turn;
+    private Thread aiThread;
 
     /**
      * @param xPlayer The Computer object if the X player is a computer, null if it is a human
@@ -27,9 +28,24 @@ public class TicTacToe {
 
         this.xPlayer = xPlayer;
         this.oPlayer = oPlayer;
+
+        if (this.xPlayer != null) {
+            this.xPlayer.setBoard(this.board);
+            this.xPlayer.setPlayingAs(Turn.X);
+        }
+
+        if (this.oPlayer != null) {
+            this.oPlayer.setBoard(this.board);
+            this.oPlayer.setPlayingAs(Turn.O);
+        }
     }
 
     public void draw() {
+        // Do not draw the board if the AI is running, since the AI mutates the Board object
+        if (this.aiThread != null && this.aiThread.isAlive()) {
+            return;
+        }
+
         this.board.draw();
     }
 
@@ -54,7 +70,7 @@ public class TicTacToe {
         if (ai == null) {
             this.playerMove();
         } else {
-            ai.makeMove(this.board, this.turn);
+            ai.run();
             this.turn = this.turn.switchTurn();
         }
     }
