@@ -45,13 +45,13 @@ public class MiniMax extends Computer {
                 }
             }
 
-            if (x == 2 && o == 0) {
+            if (x == board.getSize() - 1 && o == 0) {
                 x_2_in_row++;
-            } else if (x == 1 && o == 0) {
+            } else if (x > 0 && o == 0) {
                 x_1_in_row++;
-            } else if (o == 2 && x == 0) {
+            } else if (o == board.getSize() - 1 && x == 0) {
                 o_2_in_row++;
-            } else if (o == 1 && x == 0) {
+            } else if (o > 0 && x == 0) {
                 o_1_in_row++;
             }
         }
@@ -103,12 +103,16 @@ public class MiniMax extends Computer {
     public void makeMove(Board board, Turn playingAs) {
         List<BoardSpace> emptySpaces = this.getEmptySpaces(board);
 
+        if (emptySpaces.isEmpty()) {
+            return;
+        }
+
         int bestEval = Integer.MIN_VALUE;
         BoardSpace bestSpace = emptySpaces.get(0);
 
         for (BoardSpace space : emptySpaces) {
             space.setState(playingAs.toBoardState());
-            int evaluation = this.minimax(board, 9, false, playingAs);
+            int evaluation = this.minimax(board, 4, false, playingAs);
             space.setState(BoardState.EMPTY);
 
             if (evaluation > bestEval) {

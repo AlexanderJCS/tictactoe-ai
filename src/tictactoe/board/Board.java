@@ -67,6 +67,10 @@ public class Board {
         return rowsColsDiags;
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
     /**
      * Checks for a winner.
      * @return The state of the winner, or EMPTY if there is no winner. Null if there is a tie.

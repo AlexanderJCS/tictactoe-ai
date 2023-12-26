@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFW;
 import tictactoe.board.BoardState;
 
 public class TicTacToe {
-    private static final int BOARD_SIZE = 3;
+    private static final int BOARD_SIZE = 4;
 
     private final Board board;
     private final Computer ai;
@@ -36,6 +36,12 @@ public class TicTacToe {
 
         this.ai.makeMove(this.board, this.turn);
         this.turn = this.turn.switchTurn();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 //        for (MouseEvent event : Mouse.getEvents()) {
 //            // The event was not a left click
