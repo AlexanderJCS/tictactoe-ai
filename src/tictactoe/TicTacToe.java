@@ -14,34 +14,27 @@ public class TicTacToe {
     private static final int BOARD_SIZE = 3;
 
     private final Board board;
-    private final Computer ai;
+    private final Computer xPlayer;
+    private final Computer oPlayer;
     private Turn turn;
 
-    public TicTacToe() {
+    /**
+     * @param xPlayer The Computer object if the X player is a computer, null if it is a human
+     * @param oPlayer The Computer object if the O player is a computer, null if it is a human
+     */
+    public TicTacToe(Computer xPlayer, Computer oPlayer) {
         this.board = new Board(BOARD_SIZE);
         this.turn = Turn.X;
-        this.ai = new MiniMax();
+
+        this.xPlayer = xPlayer;
+        this.oPlayer = oPlayer;
     }
 
     public void draw() {
         this.board.draw();
     }
 
-    public void update() {
-        if (this.turn == Turn.O) {
-            this.ai.makeMove(this.board, this.turn);
-            this.turn = this.turn.switchTurn();
-        }
-
-//        this.ai.makeMove(this.board, this.turn);
-//        this.turn = this.turn.switchTurn();
-//
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
+    private void playerMove() {
         for (MouseEvent event : Mouse.getEvents()) {
             // The event was not a left click
             if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
@@ -51,6 +44,26 @@ public class TicTacToe {
             if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
                 this.turn = this.turn.switchTurn();
             }
+        }
+    }
+
+    public void update() {
+        if (this.turn == Turn.X) {
+            if (this.xPlayer == null) {
+                this.playerMove();
+            } else {
+                this.xPlayer.makeMove(this.board, this.turn);
+                this.turn = this.turn.switchTurn();
+            }
+
+            return;
+        }
+
+        if (this.oPlayer == null) {
+            this.playerMove();
+        } else {
+            this.oPlayer.makeMove(this.board, this.turn);
+            this.turn = this.turn.switchTurn();
         }
     }
 
