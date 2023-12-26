@@ -8,17 +8,18 @@ import tictactoe.board.BoardState;
 import java.util.List;
 
 public class MiniMax extends Computer {
-    private int evaluate(Board board) {
+    private int evaluate(Board board, Turn playingAs) {
         // Currently only works on boards with size of 3. In the future I want to make this work with any size main.board.
         // TODO: comment above, plus clean up spaghetti
+        // TODO: reward wins that happen closer in the future
 
         // Evaluation method based on this document
         // https://john.cs.olemiss.edu/~dwilkins/CSCI531/fall12/slides/AI_09_games.pdf
 
         BoardState winner = board.winner();
-        if (winner == BoardState.X) {
+        if (winner == playingAs.toBoardState()) {
             return Integer.MAX_VALUE;
-        } else if (winner == BoardState.O) {
+        } else if (winner == playingAs.switchTurn().toBoardState()) {
             return Integer.MIN_VALUE;
         } else if (winner == null) {
             return 0;
@@ -55,7 +56,11 @@ public class MiniMax extends Computer {
             }
         }
 
-        return 3 * x_2_in_row + x_1_in_row - (3 * o_2_in_row + o_1_in_row);
+        if (playingAs == Turn.X) {
+            return 3 * x_2_in_row + x_1_in_row - (3 * o_2_in_row + o_1_in_row);
+        }
+
+        return 3 * o_2_in_row + o_1_in_row - (3 * x_2_in_row + x_1_in_row);
     }
 
     /**
@@ -66,7 +71,7 @@ public class MiniMax extends Computer {
      */
     private int minimax(Board board, int depth, boolean findMax, Turn playingAs) {
         if (depth == 0 || board.winner() != BoardState.EMPTY) {
-            return this.evaluate(board);
+            return this.evaluate(board, playingAs);
         }
 
         if (findMax) {
