@@ -1,5 +1,6 @@
 package tictactoe.ai;
 
+import tictactoe.Turn;
 import tictactoe.board.Board;
 import tictactoe.board.BoardSpace;
 import tictactoe.board.BoardState;
@@ -23,5 +24,5 @@ public abstract class Computer {
         return spaces;
     }
 
-    public abstract void makeMove(Board board, BoardSpace.BoardState playingAs);
+    public abstract void makeMove(Board board, Turn playingAs);
 }
