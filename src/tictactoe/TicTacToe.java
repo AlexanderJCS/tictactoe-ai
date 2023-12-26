@@ -29,21 +29,24 @@ public class TicTacToe {
     }
 
     public void update() {
-        if (this.turn == Turn.X) {
+        if (this.turn == Turn.O) {
             this.ai.makeMove(this.board, this.turn);
             this.turn = this.turn.switchTurn();
         }
 
-        for (MouseEvent event : Mouse.getEvents()) {
-            // The event was not a left click
-            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
-                continue;
-            }
+        this.ai.makeMove(this.board, this.turn);
+        this.turn = this.turn.switchTurn();
 
-            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
-                this.turn = this.turn.switchTurn();
-            }
-        }
+//        for (MouseEvent event : Mouse.getEvents()) {
+//            // The event was not a left click
+//            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
+//                continue;
+//            }
+//
+//            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
+//                this.turn = this.turn.switchTurn();
+//            }
+//        }
     }
 
     public BoardState run() {
