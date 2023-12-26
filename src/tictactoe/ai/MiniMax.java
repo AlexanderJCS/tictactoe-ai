@@ -8,7 +8,7 @@ import tictactoe.board.BoardState;
 import java.util.List;
 
 public class MiniMax extends Computer {
-    private int evaluate(Board board, Turn playingAs) {
+    private int evaluate(Board board, Turn playingAs, int depth) {
         // Currently only works on boards with size of 3. In the future I want to make this work with any size main.board.
         // TODO: comment above, plus clean up spaghetti
         // TODO: reward wins that happen closer in the future
@@ -18,7 +18,12 @@ public class MiniMax extends Computer {
 
         BoardState winner = board.winner();
         if (winner == playingAs.toBoardState()) {
-            return Integer.MAX_VALUE;
+            // The addition is to make sure that the AI chooses the move that wins the fastest.
+            // The -100000 is to ensure that the integer does not overflow
+            // The Math.max() is to make sure that, if the integer does overflow (which is very unlikely), it will not
+            // overflow to a negative number.
+
+            return Math.max(Integer.MAX_VALUE - 100000 + depth, Integer.MAX_VALUE);
         } else if (winner == playingAs.switchTurn().toBoardState()) {
             return Integer.MIN_VALUE;
         } else if (winner == null) {
@@ -71,7 +76,7 @@ public class MiniMax extends Computer {
      */
     private int minimax(Board board, int depth, boolean findMax, int alpha, int beta, Turn playingAs) {
         if (depth == 0 || board.winner() != BoardState.EMPTY) {
-            return this.evaluate(board, playingAs);
+            return this.evaluate(board, playingAs, depth);
         }
 
         int maxOrMin = findMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
