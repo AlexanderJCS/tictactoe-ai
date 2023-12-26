@@ -3,7 +3,7 @@ package tictactoe.board;
 import jangl.coords.WorldCoords;
 
 public class Board {
-    private static final float PADDING = 0.02f;
+    private static final float PADDING = 0.08f;
     private final int size;
     private final Lines lines;
 
@@ -12,7 +12,7 @@ public class Board {
     public Board(int size) {
         this.size = size;
         this.boardSpaces = genBoardSpaces(size);
-        this.lines = new Lines(size, PADDING);
+        this.lines = new Lines(size, PADDING / this.size);
     }
 
     private BoardState[] getStates(BoardSpace[] spaces) {
@@ -160,11 +160,11 @@ public class Board {
         for (int y = 0; y < boardSpaces.length; y++) {
             for (int x = 0; x < boardSpaces[y].length; x++) {
                 WorldCoords topLeft = new WorldCoords(
-                        topRight.x / size * x + PADDING,
-                        topRight.y / size * (y + 1) - PADDING
+                        topRight.x / size * x + PADDING / size,
+                        topRight.y / size * (y + 1) - PADDING / size
                 );
 
-                boardSpaces[y][x] = new BoardSpace(topLeft, topRight.x / size - PADDING);
+                boardSpaces[y][x] = new BoardSpace(topLeft, (topRight.x - PADDING) / size);
             }
         }
 
