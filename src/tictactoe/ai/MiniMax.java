@@ -24,6 +24,7 @@ public class MiniMax extends Computer {
             // overflow to a negative number.
 
             return Math.max(Integer.MAX_VALUE - 100000 + depth, Integer.MAX_VALUE);
+
         } else if (winner == playingAs.switchTurn().toBoardState()) {
             return Integer.MIN_VALUE;
         } else if (winner == null) {
