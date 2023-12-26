@@ -30,7 +30,7 @@ public class TicTacToe {
 
     public void update() {
         if (this.turn == Turn.X) {
-            this.ai.makeMove(this.board);
+            this.ai.makeMove(this.board, this.turn);
             this.turn = this.turn.switchTurn();
         }
 
@@ -46,7 +46,7 @@ public class TicTacToe {
         }
     }
 
-    public void run() {
+    public BoardState run() {
         while (Window.shouldRun() && this.board.winner() == BoardState.EMPTY) {
             Window.clear();
 
@@ -56,6 +56,6 @@ public class TicTacToe {
             Jangl.update();
         }
 
-        System.out.println("Winner: " + this.board.winner());
+        return this.board.winner();
     }
 }
