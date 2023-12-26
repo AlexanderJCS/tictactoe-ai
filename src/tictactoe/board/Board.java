@@ -164,7 +164,7 @@ public class Board {
                         topRight.y / size * (y + 1) - PADDING
                 );
 
-                boardSpaces[y][x] = new BoardSpace(topLeft, topRight.x / size - PADDING * 2);
+                boardSpaces[y][x] = new BoardSpace(topLeft, topRight.x / size - PADDING);
             }
         }
 
