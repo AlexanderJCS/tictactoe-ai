@@ -1,7 +1,8 @@
-package ai;
+package tictactoe.ai;
 
-import board.Board;
-import board.BoardSpace;
+import tictactoe.board.Board;
+import tictactoe.board.BoardSpace;
+import tictactoe.board.BoardState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public abstract class Computer {
 
         for (BoardSpace[] row : board.getBoardSpaces()) {
             for (BoardSpace space : row) {
-                if (space.getState() == BoardSpace.BoardState.EMPTY) {
+                if (space.getState() == BoardState.EMPTY) {
                     spaces.add(space);
                 }
             }

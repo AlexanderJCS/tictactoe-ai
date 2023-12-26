@@ -1,4 +1,4 @@
-package board;
+package tictactoe.board;
 
 import jangl.coords.WorldCoords;
 import jangl.graphics.textures.Texture;
@@ -35,10 +35,6 @@ public class BoardSpace {
 
     public void setState(BoardState state) {
         this.state = state;
-    }
-
-    public enum BoardState {
-        EMPTY, X, O
     }
 
     @Override

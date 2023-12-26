@@ -1,8 +1,6 @@
-package board;
+package tictactoe.board;
 
 import jangl.coords.WorldCoords;
-
-import java.util.Arrays;
 
 public class Board {
     private static final float PADDING = 0.02f;
@@ -17,8 +15,8 @@ public class Board {
         this.lines = new Lines(size, PADDING);
     }
 
-    private BoardSpace.BoardState[] getStates(BoardSpace[] spaces) {
-        BoardSpace.BoardState[] states = new BoardSpace.BoardState[spaces.length];
+    private BoardState[] getStates(BoardSpace[] spaces) {
+        BoardState[] states = new BoardState[spaces.length];
 
         for (int i = 0; i < spaces.length; i++) {
             states[i] = spaces[i].getState();
@@ -37,8 +35,8 @@ public class Board {
         return column;
     }
 
-    public BoardSpace.BoardState[][] getRowsColsDiags() {
-        BoardSpace.BoardState[][] rowsColsDiags = new BoardSpace.BoardState[this.size * 2 + 2][this.size];
+    public BoardState[][] getRowsColsDiags() {
+        BoardState[][] rowsColsDiags = new BoardState[this.size * 2 + 2][this.size];
 
         // Rows
         for (int i = 0; i < this.size; i++) {
@@ -73,11 +71,11 @@ public class Board {
      * Checks for a winner.
      * @return The state of the winner, or EMPTY if there is no winner. Null if there is a tie.
      */
-    public BoardSpace.BoardState winner() {
+    public BoardState winner() {
         boolean tied = true;
         for (BoardSpace[] row : this.boardSpaces) {
             for (BoardSpace space : row) {
-                if (space.getState() == BoardSpace.BoardState.EMPTY) {
+                if (space.getState() == BoardState.EMPTY) {
                     tied = false;
                     break;
                 }
@@ -92,9 +90,9 @@ public class Board {
             return null;
         }
 
-        BoardSpace.BoardState[][] rowsColsDiags = this.getRowsColsDiags();
+        BoardState[][] rowsColsDiags = this.getRowsColsDiags();
 
-        for (BoardSpace.BoardState[] rowColDiag : rowsColsDiags) {
+        for (BoardState[] rowColDiag : rowsColsDiags) {
             boolean winner = true;
             for (int i = 1; i < rowColDiag.length; i++) {
                 if (rowColDiag[i] != rowColDiag[0]) {
@@ -108,16 +106,16 @@ public class Board {
             }
         }
 
-        return BoardSpace.BoardState.EMPTY;
+        return BoardState.EMPTY;
     }
 
     /**
-     * Selects a space on the board.
+     * Selects a space on the main.board.
      * @param state The state to set the space to.
      * @param location The location of the space.
      * @return Whether the space was selected.
      */
-    public boolean selectSpace(BoardSpace.BoardState state, WorldCoords location) {
+    public boolean selectSpace(BoardState state, WorldCoords location) {
         for (BoardSpace[] row : this.boardSpaces) {
             for (BoardSpace space : row) {
                 if (!space.collides(location)) {
@@ -125,7 +123,7 @@ public class Board {
                 }
 
                 // Do not override a space that is already selected
-                if (space.getState() != BoardSpace.BoardState.EMPTY) {
+                if (space.getState() != BoardState.EMPTY) {
                     return false;
                 }
 

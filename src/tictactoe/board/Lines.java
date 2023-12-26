@@ -1,4 +1,4 @@
-package board;
+package tictactoe.board;
 
 import jangl.color.ColorFactory;
 import jangl.coords.WorldCoords;
@@ -15,7 +15,7 @@ public class Lines {
 
         WorldCoords topRight = WorldCoords.getTopRight();
 
-        // Set i = 2 instead of i = 0 to skip the first two lines, which border the board
+        // Set i = 2 instead of i = 0 to skip the first two lines, which border the main.board
         for (int i = 2; i < this.lines.length; i += 2) {
             this.lines[i] = new Rect(new WorldCoords(topRight.x / boardSize * (i / 2), topRight.y), thickness, topRight.y);
             this.lines[i + 1] = new Rect(new WorldCoords(0, topRight.y / boardSize * (i / 2)), topRight.x, thickness);

@@ -1,2 +1,2 @@
-# tictactoe-ai
-A TicTacToe AI using the Minimax algorithm
+# tictactoe-tictactoe.ai
+A tictactoe.TicTacToe AI using the Minimax algorithm

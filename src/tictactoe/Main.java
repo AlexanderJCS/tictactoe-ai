@@ -1,3 +1,5 @@
+package tictactoe;
+
 import jangl.Jangl;
 import jangl.color.ColorFactory;
 import jangl.io.Window;
