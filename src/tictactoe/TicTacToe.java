@@ -3,7 +3,6 @@ package tictactoe;
 import tictactoe.ai.Computer;
 import tictactoe.ai.MiniMax;
 import tictactoe.board.Board;
-import tictactoe.board.BoardSpace;
 import jangl.Jangl;
 import jangl.io.Window;
 import jangl.io.mouse.Mouse;
@@ -12,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import tictactoe.board.BoardState;
 
 public class TicTacToe {
-    private static final int BOARD_SIZE = 4;
+    private static final int BOARD_SIZE = 3;
 
     private final Board board;
     private final Computer ai;
@@ -34,25 +33,25 @@ public class TicTacToe {
             this.turn = this.turn.switchTurn();
         }
 
-        this.ai.makeMove(this.board, this.turn);
-        this.turn = this.turn.switchTurn();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-//        for (MouseEvent event : Mouse.getEvents()) {
-//            // The event was not a left click
-//            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
-//                continue;
-//            }
+//        this.ai.makeMove(this.board, this.turn);
+//        this.turn = this.turn.switchTurn();
 //
-//            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
-//                this.turn = this.turn.switchTurn();
-//            }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
 //        }
+
+        for (MouseEvent event : Mouse.getEvents()) {
+            // The event was not a left click
+            if (event.button != GLFW.GLFW_MOUSE_BUTTON_1 || event.action != GLFW.GLFW_PRESS) {
+                continue;
+            }
+
+            if (this.board.selectSpace(this.turn.toBoardState(), Mouse.getMousePos())) {
+                this.turn = this.turn.switchTurn();
+            }
+        }
     }
 
     public BoardState run() {
