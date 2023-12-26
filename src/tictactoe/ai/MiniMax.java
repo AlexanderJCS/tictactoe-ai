@@ -74,29 +74,21 @@ public class MiniMax extends Computer {
             return this.evaluate(board, playingAs);
         }
 
-        if (findMax) {
-            int maxEval = Integer.MIN_VALUE;
-
-            for (BoardSpace space : this.getEmptySpaces(board)) {
-                space.setState(playingAs.toBoardState());
-                int evaluation = this.minimax(board, depth - 1, false, playingAs);
-                maxEval = Math.max(maxEval, evaluation);
-                space.setState(BoardState.EMPTY);
-            }
-
-            return maxEval;
-        }
-
-        int minEval = Integer.MAX_VALUE;
+        int maxOrMin = findMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
         for (BoardSpace space : this.getEmptySpaces(board)) {
-            space.setState(playingAs.switchTurn().toBoardState());
-            int evaluation = this.minimax(board, depth - 1, true, playingAs);
-            minEval = Math.min(minEval, evaluation);
+            BoardState stateToSet = findMax ? playingAs.toBoardState() : playingAs.switchTurn().toBoardState();
+
+            space.setState(stateToSet);
+
+            int evaluation = this.minimax(board, depth - 1, !findMax, playingAs);
+
+            maxOrMin = findMax ? Math.max(maxOrMin, evaluation) : Math.min(maxOrMin, evaluation);
+
             space.setState(BoardState.EMPTY);
         }
 
-        return minEval;
+        return maxOrMin;
     }
 
     @Override
