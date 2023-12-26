@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import tictactoe.board.BoardState;
 
 public class TicTacToe {
-    private static final int BOARD_SIZE = 7;
+    private static final int BOARD_SIZE = 3;
 
     private final Board board;
     private final Computer ai;
