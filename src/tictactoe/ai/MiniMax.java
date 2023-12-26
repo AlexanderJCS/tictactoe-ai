@@ -69,7 +69,7 @@ public class MiniMax extends Computer {
      * @param depth The depth of the search.
      * @param findMax Whether to find the maximum or minimum.
      */
-    private int minimax(Board board, int depth, boolean findMax, Turn playingAs) {
+    private int minimax(Board board, int depth, boolean findMax, int alpha, int beta, Turn playingAs) {
         if (depth == 0 || board.winner() != BoardState.EMPTY) {
             return this.evaluate(board, playingAs);
         }
@@ -80,12 +80,21 @@ public class MiniMax extends Computer {
             BoardState stateToSet = findMax ? playingAs.toBoardState() : playingAs.switchTurn().toBoardState();
 
             space.setState(stateToSet);
-
-            int evaluation = this.minimax(board, depth - 1, !findMax, playingAs);
-
+            int evaluation = this.minimax(board, depth - 1, !findMax, alpha, beta, playingAs);
             maxOrMin = findMax ? Math.max(maxOrMin, evaluation) : Math.min(maxOrMin, evaluation);
 
             space.setState(BoardState.EMPTY);
+
+            // Alpha beta pruning
+            if (findMax) {
+                alpha = Math.max(alpha, evaluation);
+            } else {
+                beta = Math.min(beta, evaluation);
+            }
+
+            if (beta <= alpha) {
+                break;
+            }
         }
 
         return maxOrMin;
@@ -104,7 +113,7 @@ public class MiniMax extends Computer {
 
         for (BoardSpace space : emptySpaces) {
             space.setState(playingAs.toBoardState());
-            int evaluation = this.minimax(board, 4, false, playingAs);
+            int evaluation = this.minimax(board, 4, false, Integer.MIN_VALUE, Integer.MAX_VALUE, playingAs);
             space.setState(BoardState.EMPTY);
 
             if (evaluation > bestEval) {
