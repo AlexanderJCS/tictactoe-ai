@@ -1,7 +1,6 @@
 package tictactoe;
 
 import tictactoe.ai.Computer;
-import tictactoe.ai.MiniMax;
 import tictactoe.board.Board;
 import jangl.Jangl;
 import jangl.io.Window;
@@ -47,24 +46,26 @@ public class TicTacToe {
         }
     }
 
+    /**
+     * Makes the move with the AI if it is not null, otherwise prompts human for input
+     * @param ai The AI to make the move with, or null
+     */
+    private void makeMove(Computer ai) {
+        if (ai == null) {
+            this.playerMove();
+        } else {
+            ai.makeMove(this.board, this.turn);
+            this.turn = this.turn.switchTurn();
+        }
+    }
+
     public void update() {
         if (this.turn == Turn.X) {
-            if (this.xPlayer == null) {
-                this.playerMove();
-            } else {
-                this.xPlayer.makeMove(this.board, this.turn);
-                this.turn = this.turn.switchTurn();
-            }
-
+            this.makeMove(this.xPlayer);
             return;
         }
 
-        if (this.oPlayer == null) {
-            this.playerMove();
-        } else {
-            this.oPlayer.makeMove(this.board, this.turn);
-            this.turn = this.turn.switchTurn();
-        }
+        this.makeMove(this.oPlayer);
     }
 
     public BoardState run() {
