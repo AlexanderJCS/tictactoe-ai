@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import tictactoe.board.BoardState;
 
 public class TicTacToe {
-    private static final int BOARD_SIZE = 3;
+    private static final int BOARD_SIZE = 4;
 
     private final Board board;
     private final Computer xPlayer;
@@ -46,6 +46,7 @@ public class TicTacToe {
             return;
         }
 
+        Window.clear();
         this.board.draw();
     }
 
@@ -69,8 +70,14 @@ public class TicTacToe {
     private void makeMove(Computer ai) {
         if (ai == null) {
             this.playerMove();
-        } else {
-            ai.run();
+
+        } else if (this.aiThread == null || !this.aiThread.isAlive()) {
+            this.aiThread = new Thread(ai);
+
+            // Draw the screen before the AI starts, since you won't be able to draw while it's running
+            this.draw();
+
+            this.aiThread.start();
             this.turn = this.turn.switchTurn();
         }
     }
@@ -86,8 +93,6 @@ public class TicTacToe {
 
     public BoardState run() {
         while (Window.shouldRun() && this.board.winner() == BoardState.EMPTY) {
-            Window.clear();
-
             this.update();
             this.draw();
 
